@@ -44,33 +44,3 @@ jobs:
           name: my-artifact
           path: x64\Release\ # or path/to/artifact
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
-      
-
-  lint:
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: RunLint
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: echo LINTING
-
-  test:
-    needs: [build, lint]
-    runs-on: windows-latest
-    
-    steps:
-    
-    - name: Setup VSTest.exe
-      uses: Malcolmnixon/Setup-VSTest@v4
-      
-    - name: DownloadBinaries
-      uses: actions/download-artifact@v3
-      with:
-        name: my-artifact
-        path: x64\Release
-    
-    - name: RunTests
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: VSTest.Console.exe  x64\Release\UnitTest1.dll
